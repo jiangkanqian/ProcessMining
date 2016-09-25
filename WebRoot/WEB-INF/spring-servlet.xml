@@ -1,0 +1,65 @@
+<?xml  version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- 配置注解驱动 -->
+	<mvc:annotation-driven>
+	  <mvc:message-converters register-defaults="false">
+	    <bean id="jacksonMessageConverter" 
+	      class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+	  </mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	
+	<!-- 扫描当前包下及子包下带有@Controller注释的BEAN -->
+    <context:component-scan base-package="net.ProcessMining" use-default-filters="false">
+        <!--<context:include-filter type="regex" expression=".*.controller"/>-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+	
+	<mvc:view-controller path="/" view-name="forward:/login"/>
+	<mvc:default-servlet-handler/>
+	<!-- 映射静态资源 -->
+	<mvc:resources mapping="/images/**" location="/WEB-INF/images/" />
+    <mvc:resources mapping="/css/**" location="/WEB-INF/css/" />
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/" />
+    <mvc:resources mapping="/js/**" location="/WEB-INF/processMining/" />
+    <mvc:resources mapping="/fonts/css/**" location="/WEB-INF/fonts/css/" />
+    <mvc:resources mapping="/fonts/fonts/**" location="/WEB-INF/fonts/fonts/" />
+    
+	
+    <!-- 配置视图解析器 -->
+	<bean id="jspViewResolver"  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	 <!-- 资源文件配置 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>/WEB-INF/resources.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+
+   
+</beans>
